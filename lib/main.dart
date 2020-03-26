@@ -1,4 +1,11 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+
+final dummyItems = [
+  'https://cdn.pixabay.com/photo/2016/01/18/09/46/yoga-1146277__340.jpg',
+  'https://cdn.pixabay.com/photo/2020/02/26/16/31/butterfly-4882221__340.jpg',
+  'https://cdn.pixabay.com/photo/2020/03/09/11/58/engineer-4915435__340.jpg',
+];
 
 void main() => runApp(MyApp());
 
@@ -24,7 +31,7 @@ class MyHomePage extends StatefulWidget {
 class Page1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: <Widget>[
         _buildTop(),
         _buildMiddle(),
@@ -137,10 +144,43 @@ class Page1 extends StatelessWidget {
   }
 
   Widget _buildMiddle(){
-    return Text('Middle');
+    return CarouselSlider(
+      height: 150.0,
+      autoPlay: true,
+      items: dummyItems.map((url) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: BoxDecoration(
+                color: Colors.amber
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.network(
+                  url,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            );
+          },
+        );
+      }).toList(),
+    );
   }
   Widget _buildBottom(){
-    return Text('Bottom');
+    final items = List.generate(10, (i) {
+      return ListTile(
+        leading: Icon(Icons.notifications_none),
+        title: Text('[이벤트] 이것은 공지사항 입니다'),
+      );
+    });
+    return ListView(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      children: items,
+    );
   }
 }
 
